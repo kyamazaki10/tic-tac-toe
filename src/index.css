@@ -35,6 +35,15 @@ ol, ul {
   display: table;
 }
 
+.steps {
+  border: none;
+  cursor: pointer;
+}
+
+.steps :hover {
+  color: #666;
+}
+
 .status {
   margin-bottom: 10px;
 }
