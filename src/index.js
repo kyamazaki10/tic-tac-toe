@@ -10,6 +10,12 @@ function Square(props) {
   );
 }
 
+function Label(props) {
+  return (
+    <div className="board-label">{props.value}</div>
+  )
+}
+
 class Board extends React.Component {
   renderSquare(i) {
     return (
@@ -23,20 +29,34 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+        <div className="board label-left">
+          <Label value="3" />
+          <Label value="2" />
+          <Label value="1" />
         </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+
+        <div className="board">
+          <div className="board-row">
+            {this.renderSquare(0)}
+            {this.renderSquare(1)}
+            {this.renderSquare(2)}
+          </div>
+          <div className="board-row">
+            {this.renderSquare(3)}
+            {this.renderSquare(4)}
+            {this.renderSquare(5)}
+          </div>
+          <div className="board-row">
+            {this.renderSquare(6)}
+            {this.renderSquare(7)}
+            {this.renderSquare(8)}
+          </div>
         </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+
+        <div className="board label-bottom">
+          <Label value="A" />
+          <Label value="B" />
+          <Label value="C" />
         </div>
       </div>
     );
@@ -68,7 +88,9 @@ class Game extends React.Component {
 
     this.setState({
       history: history.concat([{
-        squares: squares
+        squares: squares,
+        column: calculateColumn(i),
+        row: calculateRow(i)
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
@@ -86,11 +108,14 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+
     const moves = history.map((step, move) => {
       const desc = move ? 'Go to move #' + move : 'Go to game start';
+      const colRow = (step.column && step.row) ? '(' + step.column + step.row + ')' : '';
+
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)}>{desc} {colRow}</button>
         </li>
       );
     });
@@ -108,10 +133,41 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>
+            <span>{this.state.column}{this.state.row}</span>
+            {moves}
+          </ol>
         </div>
       </div>
     );
+  }
+}
+
+function calculateColumn(i) {
+  const columns = [
+    { name: 'A', squares: [ 0, 3, 6 ] },
+    { name: 'B', squares: [ 1, 4, 7 ] },
+    { name: 'C', squares: [ 2, 5, 8 ] }
+  ];
+
+  return getColumnRow(i, columns);
+}
+
+function calculateRow(i) {
+  const rows = [
+    { name: 1, squares: [6, 7, 8] },
+    { name: 2, squares: [3, 4, 5] },
+    { name: 3, squares: [0, 1, 2] }
+  ];
+
+  return getColumnRow(i, rows);
+}
+
+function getColumnRow(i, array) {
+  for (let j=0; j<array.length; j++) {
+    if (array[j].squares.includes(i)) {
+      return array[j].name;
+    }
   }
 }
 

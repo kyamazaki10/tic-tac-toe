@@ -7,6 +7,28 @@ ol, ul {
   padding-left: 30px;
 }
 
+.board {
+  float: left;
+}
+
+.board.label-left {
+  width: 34px;
+  margin-top: 7px;
+  text-align: center;
+}
+
+.board.label-bottom {
+  margin-left: 34px;
+  text-align: center;
+  clear: both;
+}
+
+.board .board-label {
+  width: 34px;
+  height: 34px;
+  float: left;
+}
+
 .board-row:after {
   clear: both;
   content: "";
