@@ -13,7 +13,7 @@ function Square(props) {
 function Label(props) {
   return (
     <div className="board-label">{props.value}</div>
-  )
+  );
 }
 
 class Board extends React.Component {
@@ -133,10 +133,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>
-            <span>{this.state.column}{this.state.row}</span>
-            {moves}
-          </ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );
