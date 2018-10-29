@@ -17,9 +17,26 @@ function Label(props) {
 }
 
 class Board extends React.Component {
+  renderBoard() {
+    let rows = [];
+
+    for (let i=0; i<3; i++) {
+      let squares = [];
+
+      for (let j=i*3; j<(i*3+3); j++) {
+        squares.push(this.renderSquare(j));
+      }
+
+      rows.push(<div key={i} className="board-row">{squares}</div>)
+    }
+
+    return rows;
+  }
+
   renderSquare(i) {
     return (
       <Square
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -36,21 +53,7 @@ class Board extends React.Component {
         </div>
 
         <div className="board">
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div>
+          {this.renderBoard()}
         </div>
 
         <div className="board label-bottom">
