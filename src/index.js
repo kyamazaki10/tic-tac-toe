@@ -69,6 +69,7 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       history: [{
         squares: Array(9).fill(null)
@@ -96,6 +97,7 @@ class Game extends React.Component {
         row: calculateRow(i)
       }]),
       stepNumber: history.length,
+      ascending: this.state.ascending,
       xIsNext: !this.state.xIsNext
     });
   }
@@ -104,6 +106,12 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0
+    });
+  }
+
+  toggleSort() {
+    this.setState({
+      ascending: !this.state.ascending
     });
   }
 
@@ -138,7 +146,10 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{(this.state.ascending === true) ? moves : moves.reverse()}</ol>
+          <div className="sort">
+            <button onClick={() => {this.toggleSort()}}>toggle sort</button>
+          </div>
         </div>
       </div>
     );

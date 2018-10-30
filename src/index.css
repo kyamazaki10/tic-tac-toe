@@ -35,6 +35,10 @@ ol, ul {
   display: table;
 }
 
+.sort {
+  margin-top: 30px;
+}
+
 .steps {
   border: none;
   cursor: pointer;
