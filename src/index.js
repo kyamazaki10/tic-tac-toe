@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  const className = 'square' + (props.winningRow ? ' highlight' : '');
+
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className={className} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -34,10 +36,13 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
+    const winningRow = this.props.winningRow;
+
     return (
       <Square
         key={i}
         value={this.props.squares[i]}
+        winningRow={winningRow && winningRow.includes(i)}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -74,6 +79,8 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
+      winner: null,
+      winningSquares: null,
       stepNumber: 0,
       xIsNext: true
     };
@@ -119,6 +126,13 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    let winningLetter;
+    let winningRow;
+
+    if (winner) {
+      winningLetter = winner.letter;
+      winningRow = winner.row;
+    }
 
     const moves = history.map((step, move) => {
       let desc = move ? 'Go to move #' + move : 'Go to game start';
@@ -134,13 +148,14 @@ class Game extends React.Component {
     });
 
     let status;
-    status = (winner) ? 'Winner: ' + winner : 'Next Player: ' + (this.state.xIsNext ? 'X' : 'O');
+    status = (winner) ? 'Winner: ' + winningLetter : 'Next Player: ' + (this.state.xIsNext ? 'X' : 'O');
 
     return (
       <div className="game">
         <div className="game-board">
           <Board
             squares={current.squares}
+            winningRow={winningRow ? winningRow : null}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -200,7 +215,10 @@ function calculateWinner(squares) {
     const [a, b, c] = lines[i];
 
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        letter: squares[a],
+        row: [a, b, c]
+      }
     }
   }
 
